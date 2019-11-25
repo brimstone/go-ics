@@ -67,7 +67,7 @@ func parseTime(attributes []string, t string) (time.Time, error) {
 	return actual, err
 }
 
-func readerEvents(r io.Reader) ([]Event, error) {
+func ReaderEvents(r io.Reader) ([]Event, error) {
 	//log := logger.New()
 	var events []Event
 	reader := bufio.NewReader(r)
@@ -135,5 +135,5 @@ func HTTPEvents(url string) ([]Event, error) {
 	}
 	defer resp.Body.Close()
 	f := resp.Body
-	return readerEvents(f)
+	return ReaderEvents(f)
 }
