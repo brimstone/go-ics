@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -109,7 +110,7 @@ func ReaderEvents(r io.Reader) ([]Event, error) {
 			e.Summary = fields[1]
 
 		case "ATTENDEE":
-			e.Attendee = fields[1]
+			e.Attendee = strings.TrimPrefix(fields[1], "mailto:")
 
 		case "DTSTART":
 			e.Start, err = parseTime(attributes, fields[1])
@@ -124,6 +125,9 @@ func ReaderEvents(r io.Reader) ([]Event, error) {
 			}
 		}
 	}
+	sort.Slice(events, func(i, j int) bool {
+		return events[i].Start.Before(events[j].Start)
+	})
 	return events, nil
 
 }
